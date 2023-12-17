@@ -19,6 +19,7 @@ class UserController extends Controller
 
     public function store(Request $request): JsonResponse
     {
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
@@ -40,15 +41,40 @@ class UserController extends Controller
         }
     }
 
-    public function show(User $user)
+    public function show(User $user): JsonResponse
     {
+        return response()->json($user);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): JsonResponse
     {
+        $validatedData = $request->validate([
+            'name' => 'string|max:255',
+            'email' => 'string|email|max:255|unique:users,email,' . $user->id,
+            'phone' => 'nullable|string|max:255',
+        ]);
+
+        try {
+            $user->fill($validatedData);
+            $user->save();
+
+            return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+        } catch (Exception $e) {
+            Log::error('User update failed: ' . $e->getMessage());
+            return response()->json(['error' => 'User update failed'], 500);
+        }
     }
 
-    public function destroy(User $user)
+
+    public function destroy(User $user): JsonResponse
     {
+        try {
+            $user->delete();
+
+            return response()->json(['message' => 'User deleted successfully']);
+        } catch (Exception $e) {
+            Log::error('User deletion failed: ' . $e->getMessage());
+            return response()->json(['error' => 'User deletion failed'], 500);
+        }
     }
 }

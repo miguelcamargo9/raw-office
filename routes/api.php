@@ -16,5 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth.apikey')->group(function () {
-    Route::resource('users', UserController::class);
+    Route::resource('users', UserController::class)->except(['create', 'edit']);
 });
