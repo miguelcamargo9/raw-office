@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libmcrypt-dev \
     libreadline-dev \
-    libfreetype6-dev
+    libfreetype6-dev \
+    libonig-dev \
+    libzip-dev
 
 RUN docker-php-ext-install \
     bz2 \
