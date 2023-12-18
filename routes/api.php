@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,4 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth.apikey')->group(function () {
     Route::resource('users', UserController::class)->except(['create', 'edit']);
+});
+
+Route::middleware('auth.apikey')->prefix('v1')->group(function () {
+    Route::resource('users', UserServiceController::class)->except(['create', 'edit']);
 });
